@@ -103,6 +103,7 @@ server.use("/auth", authRouters.router);
 server.use("/users", isAuth(), usersRouters.router);
 server.use("/cart", isAuth(), cartRouters.router);
 server.use("/orders", isAuth(), orderRouters.router);
+server.get('*',(req,res)=>res.send(path.resolve('build', "index.html")))
 //Mail end point
 server.post("/mail",async(req,res)=>{
   sendEmail();
@@ -186,7 +187,7 @@ const stripe = require("stripe")(process.env.STRIPE_SERVER_KEY);
 
 
 server.post("/create-payment-intent", async (req, res) => {
-  const { totalAmount} = req.body;
+  const { totalAmount ,orderId} = req.body;
 
 const customer = await stripe.customers.create({  //TODO: set customer 
     name: 'Jenny Rosen',
@@ -213,6 +214,9 @@ const customer = await stripe.customers.create({  //TODO: set customer
     automatic_payment_methods: {
       enabled: true,
     },
+    metadata:{
+      order_id:orderId
+    }
   });
 
   res.send({
