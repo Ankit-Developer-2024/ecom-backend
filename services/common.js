@@ -7,7 +7,6 @@ const mailjet = require('node-mailjet').apiConnect(
   
 exports.isAuth=(req,res,done)=> {
   console.log("jwt error occur-");
-  
   return passport.authenticate('jwt')
 }
 
