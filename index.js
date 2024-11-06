@@ -138,6 +138,8 @@ passport.use(
         "sha256",
         async function (err, hashedPassword) {
           if (!crypto.timingSafeEqual(user.password, hashedPassword)) {
+            console.log("invalid");
+            
            return done(null, false, { message: "Invalid credentials" });
           } else {
             const token = jwt.sign(sanitizeUser(user), process.env.JWT_SECRET_KEY);
@@ -146,6 +148,8 @@ passport.use(
         }
       );
     } catch (error) {
+      console.log(error);
+      
       done(error);
     }
   })
@@ -223,10 +227,7 @@ const customer = await stripe.customers.create({  //TODO: set customer
     }
   });
 
-  res.send({
-    clientSecret: paymentIntent.client_secret,
-    // [DEV]: For demo purposes only, you should avoid exposing the PaymentIntent ID in the client-side code.
-    dpmCheckerLink: `https://dashboard.stripe.com/settings/payment_methods/review?transaction_id=${paymentIntent.id}`,
+  res.send({clientSecret: paymentIntent.client_secret,
   });
 });
 
