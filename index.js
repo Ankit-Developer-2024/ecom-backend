@@ -42,7 +42,7 @@ const { Order } = require("./model/Order");
 
 const endpointSecret = process.env.ENDPOINT_SECRET;
 
-server.post('/webhook', express.raw({type: 'application/json'}),async (request, response) => {
+server.post('/webhook', express.raw({type: 'application/json'}), (request, response) => {
     const sig = request.headers['stripe-signature'];
   
     let event;
@@ -59,9 +59,9 @@ server.post('/webhook', express.raw({type: 'application/json'}),async (request, 
       case 'payment_intent.succeeded':
         const paymentIntentSucceeded = event.data.object;
         // Then define and call a function to handle the event payment_intent.succeeded
-        const order=await Order.findById(paymentIntentSucceeded.metadata.orderId);
-        order.paymentStatus="recived";
-        await order.save();
+        // const order=await Order.findById(paymentIntentSucceeded.metadata.orderId);
+        // order.paymentStatus="recived";
+        // await order.save();
         break;
       // ... handle other event types
       default:
